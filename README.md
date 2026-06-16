@@ -131,3 +131,9 @@ ORDER BY sort_type ASC, sort_level2 ASC, id ASC;
 <img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
 </div>
 ```
+## Strategi Rekomendasi Bisnis (Decision Making):
+1. Investigasi Nilai Z-Score Positif Ekstrem ($Z > 3$): Transaksi seperti sales S9921 menghasilkan nilai order jauh melampaui rata-rata timnya. Ini mengindikasikan adanya b2b bulk order potensial atau anomali input data (human error). Manajemen perlu menduplikasi strategi penjualan unit ini ke unit lain.
+2. Mitigasi Nilai Z-Score Negatif Ekstrem ($Z < -3$): Transaksi yang jatuh terlalu dalam di bawah rata-rata mengindikasikan adanya churn rate tinggi, diskon tidak rasional yang merugikan margin, atau performa buruk yang memerlukan intervensi coaching langsung dari Manager Level 2 terkait.
+3. Alokasi Resource Berbasis Beban Anomali: Manager N0549 memiliki 5 kasus transaksi anomali (tertinggi). Operasional audit internal harus difokuskan pada klaster wilayah kerja N0549 guna menstabilkan performa penjualan wilayah tersebut.
+
+
