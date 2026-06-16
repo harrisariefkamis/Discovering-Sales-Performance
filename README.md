@@ -127,13 +127,7 @@ FROM (
 ORDER BY sort_type ASC, sort_level2 ASC, id ASC;
 ```
 
-level2 (Manager L2),jumlah_anomali,id (Sales Outlier),nilai_order,average (Group),z_score,Tipe Data
-N0549,5,NULL,NULL,NULL,NULL,Summary
-N0550,2,NULL,NULL,NULL,NULL,Summary
-N0549,NULL,S9921,"45,000.00","12,500.00",+3.45,Detail
-N0549,NULL,S1204,"1,200.00","12,500.00",-3.12,Detail
-
-Key Insight & Rekomendasi Bisnis (Decision Making):
+## Key Insight & Rekomendasi Bisnis (Decision Making):
 1. Investigasi Nilai Z-Score Positif Ekstrem ($Z > 3$): Transaksi seperti sales S9921 menghasilkan nilai order jauh melampaui rata-rata timnya. Ini mengindikasikan adanya b2b bulk order potensial atau anomali input data (human error). Manajemen perlu menduplikasi strategi penjualan unit ini ke unit lain.Mitigasi Nilai Z-Score Negatif Ekstrem ($Z < -3$):
 2. Transaksi yang jatuh terlalu dalam di bawah rata-rata mengindikasikan adanya churn rate tinggi, diskon tidak rasional yang merugikan margin, atau performa buruk yang memerlukan intervensi coaching langsung dari Manager Level 2 terkait.
 3. Alokasi Resource Berbasis Beban Anomali:Manager N0549 memiliki 5 kasus transaksi anomali (tertinggi). Operasional audit internal harus difokuskan pada klaster wilayah kerja N0549 guna menstabilkan performa penjualan wilayah tersebut.🚀
