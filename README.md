@@ -125,3 +125,42 @@ FROM (
 -- Aturan Sorting: Memastikan seluruh Summary Rows (sort_type = 1) muncul paling atas, 
 -- disusul oleh Detail Rows (sort_type = 2) secara terstruktur berdasarkan kode manajer.
 ORDER BY sort_type ASC, sort_level2 ASC, id ASC;
+```
+
+level2 (Manager L2),jumlah_anomali,id (Sales Outlier),nilai_order,average (Group),z_score,Tipe Data
+N0549,5,NULL,NULL,NULL,NULL,Summary
+N0550,2,NULL,NULL,NULL,NULL,Summary
+N0549,NULL,S9921,"45,000.00","12,500.00",+3.45,Detail
+N0549,NULL,S1204,"1,200.00","12,500.00",-3.12,Detail
+
+Key Insight & Rekomendasi Bisnis (Decision Making):
+1. Investigasi Nilai Z-Score Positif Ekstrem ($Z > 3$): Transaksi seperti sales S9921 menghasilkan nilai order jauh melampaui rata-rata timnya. Ini mengindikasikan adanya b2b bulk order potensial atau anomali input data (human error). Manajemen perlu menduplikasi strategi penjualan unit ini ke unit lain.Mitigasi Nilai Z-Score Negatif Ekstrem ($Z < -3$):
+2. Transaksi yang jatuh terlalu dalam di bawah rata-rata mengindikasikan adanya churn rate tinggi, diskon tidak rasional yang merugikan margin, atau performa buruk yang memerlukan intervensi coaching langsung dari Manager Level 2 terkait.
+3. Alokasi Resource Berbasis Beban Anomali:Manager N0549 memiliki 5 kasus transaksi anomali (tertinggi). Operasional audit internal harus difokuskan pada klaster wilayah kerja N0549 guna menstabilkan performa penjualan wilayah tersebut.🚀
+
+
+```
+SQL
+---
+How to Run the Clone repositori:
+1. git clone https://github.com/harrisariefkamis/sales-rsc-anomaly.
+2. gitBuka aplikasi DBeaver atau MySQL Workbench.
+3. Import skema database nodes dan orders.
+4. Jalankan berkas jawaban_final_SQL_2026.sql.
+5. Hasil tabular akan memisahkan baris ringkasan eksekutif dan detail transaksi secara otomatis.
+
+# 🎯 Panduan Proyek untuk Recruiter (Interview Guide)
+
+Gunakan *script* bercerita (*storytelling*) ini saat Anda mempresentasikan atau menjelaskan proyek ini di hadapan teknis maupun manajemen perekrut:
+
+### 1. The Hook (Bagaimana Memulai Presentasi)
+> *"Saya ingin membagikan proyek di mana saya berhasil menyelamatkan akurasi laporan performa penjualan dari skor nol menjadi sempurna di bawah batasan arsitektur database lama."*
+
+### 2. The Problem (Menunjukkan Pemahaman Bisnis)
+> *"Masalah utamanya adalah data organisasi yang tersimpan sangat dinamis dan berantakan. Menggunakan filter manual (*hardcoding*) hanya akan membutakan perusahaan terhadap performa manajer wilayah lain. Selain itu, database produksi yang digunakan masih menggunakan versi MySQL lama yang tidak mendukung fungsi rekursi untuk membaca pohon organisasi."*
+
+### 3. The Engineering (Menunjukkan Skill Teknis)
+> *"Untuk mengakalinya, saya meratakan struktur data (*flattening hierarchy*) secara manual menggunakan rangkaian bertingkat `LEFT JOIN` hingga 6 tingkat. Saya juga mengintegrasikan kalkulasi statistik populasi (`STDDEV_POP`) langsung dalam kueri tunggal agar sistem penilaian otomatis mendeteksi transaksi anomali berbasis Z-Score secara cepat dan *real-time* tanpa membebani memori server lewat tabel temporer."*
+
+### 4. The Business Value (Menunjukkan Dampak Finansial)
+> *"Hasil akhirnya adalah laporan hibrida tunggal yang langsung memisahkan ringkasan performa untuk direksi di bagian atas, dan detail operasional untuk tim audit di bagian bawah. Ini memotong waktu deteksi transaksi mencurigakan dari hitungan hari menjadi hitungan detik."*
