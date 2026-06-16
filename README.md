@@ -1,7 +1,5 @@
 # 📊 End-to-End Data Analytics Portfolio: Sales Performance Root Cause Analysis & Anomaly Detection
-<p align="center">
-  <img url="[images/dashboard_sales.png](https://sql-anomaly-dashboard-portfolio-142260617876.asia-southeast1.run.app)" alt="SQL Anomaly Portfolio Builder" width="80%">
-</p>
+Lihat Dashboard:https://sql-anomaly-dashboard-portfolio-142260617876.asia-southeast1.run.app
 
 ## 📌 Project Overview
 Proyek ini berfokus pada **Root Cause Analysis (RCA)** untuk mengidentifikasi penurunan performa penjualan serta mendeteksi **anomali transaksi (outlier)** pada struktur organisasi multi-level yang kompleks. 
