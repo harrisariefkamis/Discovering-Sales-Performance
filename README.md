@@ -158,3 +158,14 @@ Gunakan *script* bercerita (*storytelling*) ini saat Anda mempresentasikan atau 
 
 ### 4. The Business Value (Menunjukkan Dampak Finansial)
 > *"Hasil akhirnya adalah laporan hibrida tunggal yang langsung memisahkan ringkasan performa untuk direksi di bagian atas, dan detail operasional untuk tim audit di bagian bawah. Ini memotong waktu deteksi transaksi mencurigakan dari hitungan hari menjadi hitungan detik."*
+```
+
+
+
+## 📞 Kontak
+| Platform | Link |
+|---|---|
+| 📧 Email | harisariefkamis16@gmail.com |
+| 📱 WhatsApp | +62 852-8243-6796 |
+| 💼 LinkedIn | [linkedin.com/in/harisariefkamis](https://linkedin.com/in/harisariefkamis) |
+| 🐙 GitHub | [github.com/harisariefkamis](https://github.com/harisariefkamis)
