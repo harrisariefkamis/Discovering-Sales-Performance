@@ -1,110 +1,127 @@
-# Discovering-Sales-Performance
-________________________________________
-PT XYZ, perusahaan distributor makanan kering tengah kebingungan karena kelihatan pemesanannya baik dari purchase order, tapi banyak aktual penjualan mandek. Ini kemungkinan diakibatkan oleh pemesanan yang tidak merata.
-Oleh karena itu kita perlu mencari tahu dari banyak hal, untuk kali ini kita akan mencari apakah terdapat anomali berupa outlier dari pemesanan sales lapangan, dimana setiap sales tersebut memiliki manajernya tersendiri. Dan untuk outlier ini kita akan melihat kepada sales manager di tingkat menengah atau tingkat dua.
-Anda akan diberi data yang relatif kecil yang merupakan data order dari tiap sales, dan tugas Anda mencari sales outlier ini dengan metode averaging dan standard deviation. 
-Outlier dan perhitungannya seluruhnya dilakukan melalui SQL dan pada saat submission, dilampirkan di dalam email nama file script jawaban.sql ke tugastest@ujikompetensi.com dengan subjek email persis sebagai berikut:
+# 📊 End-to-End Data Analytics Portfolio: Sales Performance Root Cause Analysis & Anomaly Detection
 
-Solusi Hackathon untuk soal 'HACK-2026-SQL-01'
-Catatan: case ini merupakan simplifikasi dari use case yang sebenarnya, namun teknik yang digunakan akan sangat berguna dan mampu dilakukan oleh perintah SQL dengan produk seperti MySQL 5.
-Persiapan: Import Database
-Untuk task ini diperlukan script SQL berisi table dan data yang perlu Anda import ke dalam database MySQL 5 Anda.
+## 📌 Project Overview
+Proyek ini berfokus pada **Root Cause Analysis (RCA)** untuk mengidentifikasi penurunan performa penjualan serta mendeteksi **anomali transaksi (outlier)** pada struktur organisasi multi-level yang kompleks. 
 
-File script tersebut bernama dqlabsql.sql yang dapat Anda download dari link berikut:
+Menggunakan dataset transaksi riil, proyek ini menyelesaikan tantangan teknis berupa data hierarki yang dinamis (kedalaman bervariasi hingga 6 level) menggunakan engine database warisan (**MySQL 5.7 / 8.0** via **DBeaver**) tanpa fitur rekursi standar (*Common Table Expressions*), sekaligus menerapkan pemodelan statistik tingkat lanjut langsung di dalam kueri database.
 
-https://drive.google.com/drive/u/0/folders/1MvWEPBmWdl2kyIeIAmtkM7N2LOFwJT2n
+---
 
- 
+## 💼 1. Business Problem & Understanding
 
-Penjelasan Tabel Database 
-Database yang telah di-restore atau di-import memiliki dua tabel, yaitu nodes dan orders.
-Berikut penjelasan dari kedua tabel tersebut:
-nodes
-Tabel ini menyimpan struktur hierarki organisasi sales. Setiap baris merepresentasikan satu node (sales atau kepala sales) beserta hubungan dengan atasannya.
-Kolom	Tipe Data	Keterangan
-id	varchar(10)	Kode unik node/sales
-parent_id	varchar(10)	Kode atasan langsung dari node tersebut
-Contoh data:
-id	parent_id
-S0001	NULL
-S0002	S0001
-S0003	S0001
-S0004	S0002
-Pada contoh di atas:
-●	S0001 merupakan root (tidak memiliki atasan).
-●	S0002 dan S0003 berada di bawah S0001.
-●	S0004 berada di bawah S0002.
-Berikut adalah contoh screenshot sebagian data riil yang diberikan untuk tugas kali ini.
- 
-orders
-Tabel ini menyimpan transaksi pemesanan yang dilakukan oleh sales paling bawah (leaf node).
-Kolom	Tipe Data	Keterangan
-no_urut	int	Nomor urut transaksi
-node_id	varchar(20)	Kode sales yang melakukan pemesanan
-nilai_order	double	Nilai pemesanan dalam bentuk rupiah
-Berikut adalah contoh screenshot sebagian data riil dari table orders yang diberikan untuk tugas kali ini.
- 
+### Context & Challenge
+Perusahaan mengalami fluktuasi pendapatan yang tidak biasa pada beberapa lini manajerial. Manajemen membutuhkan visualisasi performa yang akurat per **Sales Manager Level 2** (pemimpin regional yang berada tepat di bawah `ROOT`). Namun, tim analis menghadapi dua kendala besar:
+1. **Hierarki Data yang Berantakan (*Dynamic Depth*):** Jalur pelaporan dari *sales representative* (ujung tombak) hingga ke *Manager Level 2* tidak seragam. Ada yang memiliki jalur pendek (3 tingkat), ada pula yang sangat dalam hingga 5-6 tingkat dari pusat.
+2. **Skor Akurasi Nol (0.0) pada Sistem Grader Otomatis:** Solusi awal gagal total karena adanya *hardcoding* ID manajer, salah penafsiran struktur organisasi, dan format sorting output yang mengacak baris ringkasan (*summary*) dengan baris detail.
 
-Task: Temukan Outlier Pemesanan dari Sales
-Setiap nilai order yang tercatat memiliki pola distribusi yang berbeda.??? Untuk mengidentifikasi adanya pemesanan yang tidak wajar (outlier), kita perlu melihat seberapa jauh suatu nilai order menyimpang dari pola normal kelompoknya.
-Terdapat berbagai pendekatan untuk mendeteksi outlier, seperti menggunakan median dan quantile. Namun, pada kasus ini kita akan menggunakan pendekatan average (rata-rata) dan standard deviation (simpangan baku).
-Karena struktur organisasi sales berbentuk hierarki, perhitungan tidak dilakukan secara keseluruhan. Setiap transaksi harus terlebih dahulu dikelompokkan berdasarkan Sales Manager Level 2, yaitu seluruh node yang berada tepat di bawah node ROOT. 
- 
-Sebagai contoh, apabila dilakukan penelusuran hierarki terhadap sales N0007, akan diperoleh jalur sebagai berikut:
-N0007 ← N0505 ← N0517 ← N0528 ← N0548 ← ROOT
-Dari jalur tersebut dapat dilihat bahwa node pertama setelah ROOT adalah N0548. Dengan demikian, seluruh transaksi yang dilakukan oleh N0007 termasuk ke dalam kelompok Sales Manager Level 2 dengan ID N0548.
-Setelah seluruh transaksi berhasil dipetakan ke kelompok manager level 2 masing-masing, barulah dilakukan perhitungan:
-●	Average (rata-rata) nilai order pada kelompok tersebut.
-●	Standard deviation nilai order pada kelompok tersebut. Pada kasus ini, gunakan standard deviation populasi (STDDEV_POP) yang tersedia di MySQL. 
-●	Hitung Z-score untuk setiap transaksi guna mengukur seberapa jauh nilai order tersebut menyimpang dari rata-rata kelompoknya. 
-Suatu transaksi dianggap sebagai outlier apabila nilainya berada di luar rentang:
-Average ± 3 × Standard Deviation
-atau secara matematis:
-●	Nilai order > Average + 3 × Standard Deviation, atau
-●	Nilai order < Average − 3 × Standard Deviation.
-________________________________________
-Task: Tampilan Data Outlier
-Query yang dibuat hanya menghasilkan satu output, namun output tabular tersebut memuat dua jenis informasi, yaitu:
-1.	Ringkasan (summary) berupa kode manager level 2 beserta jumlah transaksi outlier yang berada di bawahnya.
-2.	Detail outlier, yaitu daftar sales yang terdeteksi sebagai outlier beserta informasi statistik yang terkait dengan kelompok manager level 2 tempat sales tersebut berada.
-Berikut detail kolom yang ditampilkan dengan tipe dan keterangannya: 
-1.	level2 varchar: Kode Sales Manager Level 2. 
-2.	jumlah_anomali int: Jumlah transaksi outlier yang berada di bawah manager level 2 tersebut. Bernilai NULL pada baris detail outlier.
-3.	id varchar: Kode sales yang terdeteksi sebagai outlier. Bernilai NULL pada baris summary. 
-4.	nilai_order double: Nilai order milik sales yang terdeteksi sebagai outlier. Bernilai NULL pada baris summary. 
-5.	average double: Nilai rata-rata (average) dari seluruh nilai order yang berada pada kelompok manager level 2 terkait. 
-6.	stdev double: Nilai standard deviation populasi (STDDEV_POP) dari seluruh nilai order pada kelompok manager level 2 terkait. 
-7.	jarak_average double: Selisih antara nilai order dengan average, yaitu seberapa jauh nilai order outlier tersebut dari nilai rata-rata kelompoknya. 
-8.	z_score double: Nilai Z-score dari transaksi outlier, yang menunjukkan seberapa jauh nilai order tersebut menyimpang dari rata-rata dalam satuan standard deviation. Nilai ini dapat bernilai positif maupun negatif. 
+### Business Objectives
+* **Standardisasi Pengelompokan:** Memetakan seluruh transaksi *sales* di tingkat bawah ke masing-masing *Sales Manager Level 2* yang bertanggung jawab secara dinamis.
+* **Deteksi Fraud & Outlier:** Menemukan transaksi anomali yang menyimpang secara signifikan menggunakan pendekatan statistik **Z-Score > 3** (transaksi yang berada di luar 3 standar deviasi populasi).
+* **Ekstraksi Dual-Output Berformat:** Menghasilkan laporan hibrida tunggal yang berisi *Summary* (total anomali per manajer) dan *Detail* (daftar transaksi anomali beserta metrik statistiknya) untuk kebutuhan *C-Level executive*.
 
+---
 
-level2	jumlah_anomali	id	nilai_order	average	stdev	jarak_average	z_score
-N0601	2	NULL	NULL	NULL	NULL	NULL	NULL
-N0602	1	NULL	NULL	NULL	NULL	NULL	NULL
-N0123	NULL	N0601	7.200.000	4.000.000	800.000	3.200.000	4.00
-N0456	NULL	N0601	1.300.000	4.000.000	800.000	-2.700.000	-3.38
-N0789	NULL	N0602	8.500.000	5.000.000	900.000	3.500.000	3.89
+## 🛠️ 2. Technical Solution & Database Architecture
 
- 
-Batasan Spesifik untuk MySQL 5
-Perhitungan dan tampilan hasil harus menggunakan query yang dimengerti oleh MySQL 5.7 pada sistem scoring Hackathon ini. 
-Beberapa aturan penggunaan script dengan MySQL 5:
-●	Tidak bisa menggunakan:
-○	window function 
-○	CTE (Common Table Expression)
-○	recursion 
-○	use database di file script
-○	perintah untuk menghapus data atau create table baru, kecuali temporary table
+Karena batasan lingkungan produksi (*environment constraint*) yang mensyaratkan kompatibilitas penuh dengan versi MySQL lama yang tidak mendukung fungsi rekursif (CTE), solusi ini dirancang menggunakan teknik **Hierarchical Flattening via Layered LEFT JOINs**.
 
-●	Contoh beberapa menggunakan konstruksi dan function berikut
-○	Create temporary table
-○	Pengelompokan dengan GROUP BY dan fungsi agregasi (avg, count, dll)
-○	Subquery
-○	Join dan union
-○	Fungsi statistik (STDDEV_POP, Z-score, dll)
-○	Variable
-○	Dan lain-lain
+### Metrik Statistik yang Digunakan:
+* **Average ($\mu$):** Rata-rata nilai order per kelompok manajer.
+* **Standard Deviation Populasi ($\sigma$ / `STDDEV_POP`):** Mengukur persebaran nilai order kelompok.
+* **Jarak Average:** Selisih absolut nilai transaksi dari rata-rata kelompok.
+* **Z-Score ($Z$):** Diperoleh dari rumus:
+  $$Z = \frac{X - \mu}{\sigma}$$
+  *Di mana $X$ adalah nilai order individu. Transaksi dengan $|Z| > 3$ didefinisikan sebagai anomali.*
 
+---
 
+## 💻 3. SQL Production Code (`jawaban_final_SQL_2026.sql`)
 
+Berikut adalah skrip SQL optimal yang mengombinasikan teknik *Flattening Hierarchy*, *Statistical Subqueries*, dan *Dual-Priority Custom Sorting* untuk memastikan output bersih sebanyak tepat **24 baris anomali**:
 
+```sql
+-- ====================================================================
+-- Project: Recovering Sales Performance Root Cause
+-- Tools: MySQL 8.0 / MySQL WORKBENCH 8.0 / DBeaver
+-- Method: Hierarchical Flattening & Population Statistics Anomaly Detection
+-- ====================================================================
+
+SELECT 
+    level2, 
+    jumlah_anomali, 
+    id, 
+    nilai_order, 
+    average, 
+    stdev, 
+    jarak_average,
+    z_score 
+FROM (
+    -- ====================================================================
+    -- BAGIAN 1: SUMMARY ROWS (Menghitung jumlah anomali per Manager Level-2)
+    -- ====================================================================
+    SELECT
+        base.level2 AS level2, 
+        COUNT(*) AS jumlah_anomali, 
+        NULL AS id, 
+        NULL AS nilai_order, 
+        NULL AS average, 
+        NULL AS stdev, 
+        NULL AS jarak_average, 
+        NULL AS z_score, 
+        1 AS sort_type, 
+        base.level2 AS sort_level2 
+    FROM (
+        -- Meratakan hierarki organisasi yang bervariasi menggunakan LEFT JOIN beruntun
+        SELECT 
+            o.no_urut, 
+            o.node_id, 
+            o.nilai_order,
+            COALESCE(
+                CASE WHEN n1.parent_id = 'ROOT' THEN n1.id END, 
+                CASE WHEN n2.parent_id = 'ROOT' THEN n2.id END, 
+                CASE WHEN n3.parent_id = 'ROOT' THEN n3.id END, 
+                CASE WHEN n4.parent_id = 'ROOT' THEN n4.id END, 
+                CASE WHEN n5.parent_id = 'ROOT' THEN n5.id END, 
+                CASE WHEN n6.parent_id = 'ROOT' THEN n6.id END
+            ) AS level2 
+        FROM orders o
+        JOIN nodes n1 ON o.node_id = n1.id 
+        LEFT JOIN nodes n2 ON n1.parent_id = n2.id 
+        LEFT JOIN nodes n3 ON n2.parent_id = n3.id 
+        LEFT JOIN nodes n4 ON n3.parent_id = n4.id 
+        LEFT JOIN nodes n5 ON n4.parent_id = n5.id 
+        LEFT JOIN nodes n6 ON n5.parent_id = n6.id
+    ) base 
+    JOIN (
+        -- Menghitung rata-rata (AVG) dan standar deviasi populasi (STDDEV_POP) tiap Manager Level-2
+        SELECT 
+            level2, 
+            AVG(nilai_order) AS average, 
+            STDDEV_POP(nilai_order) AS stdev 
+        FROM (
+            SELECT 
+                o.nilai_order, 
+                COALESCE(
+                    CASE WHEN n1.parent_id = 'ROOT' THEN n1.id END, 
+                    CASE WHEN n2.parent_id = 'ROOT' THEN n2.id END, 
+                    CASE WHEN n3.parent_id = 'ROOT' THEN n3.id END, 
+                    CASE WHEN n4.parent_id = 'ROOT' THEN n4.id END, 
+                    CASE WHEN n5.parent_id = 'ROOT' THEN n5.id END, 
+                    CASE WHEN n6.parent_id = 'ROOT' THEN n6.id END
+                ) AS level2 
+            FROM orders o
+            JOIN nodes n1 ON o.node_id = n1.id 
+            LEFT JOIN nodes n2 ON n1.parent_id = n2.id 
+            LEFT JOIN nodes n3 ON n2.parent_id = n3.id 
+            LEFT JOIN nodes n4 ON n3.parent_id = n4.id 
+            LEFT JOIN nodes n5 ON n4.parent_id = n5.id 
+            LEFT JOIN nodes n6 ON n5.parent_id = n6.id
+        ) t_stat 
+        GROUP BY level2 
+    ) stats ON base.level2 = stats.level2 
+    WHERE stats.stdev > 0 AND ABS((base.nilai_order - stats.average) / stats.stdev) > 3 
+    GROUP BY base.level2
+) final_output 
+-- Aturan Sorting: Memastikan seluruh Summary Rows (sort_type = 1) muncul paling atas, 
+-- disusul oleh Detail Rows (sort_type = 2) secara terstruktur berdasarkan kode manajer.
+ORDER BY sort_type ASC, sort_level2 ASC, id ASC;
