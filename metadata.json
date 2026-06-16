@@ -1,0 +1,6 @@
+{
+  "name": "SQL Anomaly Dashboard Portfolio",
+  "description": "Interactive SQL analytics portfolio builder, statistical outlier simulator, and professional PPTX presentation generator.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
