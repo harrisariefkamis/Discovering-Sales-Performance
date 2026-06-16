@@ -162,7 +162,7 @@ Gunakan *script* bercerita (*storytelling*) ini saat Anda mempresentasikan atau 
 
 
 
-## 📞 Kontak
+## Follow more docs is here.!!!
 | Platform | Link |
 |---|---|
 | 📧 Email | harisariefkamis16@gmail.com |
