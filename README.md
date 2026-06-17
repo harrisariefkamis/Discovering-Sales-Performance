@@ -1,6 +1,8 @@
 # 📊 End-to-End Data Analytics Portfolio: Sales Performance Root Cause Analysis & Anomaly Detection
 
-[![Requestly sponsorship](https://github.com/harrisariefkamis/Discovering-Sales-Performance/blob/main/android%20dashboard.png)
+<p align="center">
+  <img src="https://github.com/harrisariefkamis/Discovering-Sales-Performance/raw/main/android%20dashboard.png" alt="Sales Performance Dashboard" width="85%">
+</p>
 
 Lihat Dashboard:https://sql-anomaly-dashboard-portfolio-142260617876.asia-southeast1.run.app
 
