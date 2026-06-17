@@ -15,7 +15,7 @@ Menggunakan dataset transaksi riil, proyek ini menyelesaikan tantangan teknis be
 <p align="center">
   <img src="https://github.com/harrisariefkamis/Discovering-Sales-Performance/blob/fb7c3da4471904e88dc472f65e0cb7fbf5bbadd6/purchase_order_ERD-DIAGRAM.png" alt="ERD-Diagram" width="50%">
 </p>
----
+
 ## 💼 1. Business Problem & Understanding
 
 ### Context & Challenge
