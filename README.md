@@ -1,8 +1,8 @@
 # 📊 End-to-End Data Analytics Portfolio: Sales Performance Root Cause Analysis & Anomaly Detection
 
-## 📊 Data Insights & Interactive Dashboard
+## Data Insights & Interactive Dashboard
 <p align="center">
-  <img src="https://link-url-tempat-gambar-anda.com/nama_gambar.png" alt="Sales Performance Dashboard Demo" width="90%">
+  <img src="[https://link-url-tempat-gambar-anda.com](https://github.com/harrisariefkamis/Discovering-Sales-Performance/blob/main/android%20dashboard.png)" alt="Sales Performance Dashboard Demo" width="90%">
 </p>
 
 ### Key Insights dari Dashboard:
