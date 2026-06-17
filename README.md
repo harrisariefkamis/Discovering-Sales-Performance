@@ -10,9 +10,10 @@ Lihat Dashboard:https://sql-anomaly-dashboard-portfolio-142260617876.asia-southe
 Proyek ini berfokus pada **Root Cause Analysis (RCA)** untuk mengidentifikasi penurunan performa penjualan serta mendeteksi **anomali transaksi (outlier)** pada struktur organisasi multi-level yang kompleks. 
 
 Menggunakan dataset transaksi riil, proyek ini menyelesaikan tantangan teknis berupa data hierarki yang dinamis (kedalaman bervariasi hingga 6 level) menggunakan engine database warisan (**MySQL 5.7 / 8.0** via **DBeaver**) tanpa fitur rekursi standar (*Common Table Expressions*), sekaligus menerapkan pemodelan statistik tingkat lanjut langsung di dalam kueri database.
-
 ---
-
+<p align="center">
+  <img src="" alt="ERD-Diagram" width="50%">
+</p>
 ## 💼 1. Business Problem & Understanding
 
 ### Context & Challenge
