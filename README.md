@@ -4,7 +4,7 @@
 <p align="center">
   <img src="[https://link-url-tempat-gambar-anda.com](https://github.com/harrisariefkamis/Discovering-Sales-Performance/blob/main/android%20dashboard.png)" alt="Sales Performance Dashboard Demo" width="90%">
 </p>
-
+[![Requestly sponsorship](https://github.com/harrisariefkamis/Discovering-Sales-Performance/blob/main/android%20dashboard.png)
 ### Key Insights dari Dashboard:
 * [cite_start]**Klaster Anomali Tertinggi:** Manager **N0549** membutuhkan perhatian khusus karena menampung 5 transaksi outlier[cite: 107, 115].
 * [cite_start]**Penyimpangan Nilai Ekstrem:** Sebagian besar transaksi berada di rentang normal, namun sales **S9921** mencatat lonjakan nilai order positif ekstrem dengan Z-Score $+3.45$[cite: 109, 111].
