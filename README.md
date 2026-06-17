@@ -1,4 +1,13 @@
 # 📊 End-to-End Data Analytics Portfolio: Sales Performance Root Cause Analysis & Anomaly Detection
+
+## 📊 Data Insights & Interactive Dashboard
+<p align="center">
+  <img src="https://link-url-tempat-gambar-anda.com/nama_gambar.png" alt="Sales Performance Dashboard Demo" width="90%">
+</p>
+
+### Key Insights dari Dashboard:
+* [cite_start]**Klaster Anomali Tertinggi:** Manager **N0549** membutuhkan perhatian khusus karena menampung 5 transaksi outlier[cite: 107, 115].
+* [cite_start]**Penyimpangan Nilai Ekstrem:** Sebagian besar transaksi berada di rentang normal, namun sales **S9921** mencatat lonjakan nilai order positif ekstrem dengan Z-Score $+3.45$[cite: 109, 111].
 Lihat Dashboard:https://sql-anomaly-dashboard-portfolio-142260617876.asia-southeast1.run.app
 
 ## 📌 Project Overview
