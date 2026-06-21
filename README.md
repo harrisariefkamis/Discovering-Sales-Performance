@@ -2,12 +2,11 @@
 [![MySQL Version](https://img.shields.io/badge/MySQL-8.0-blue.svg)](https://www.mysql.com/)
 [![MySQL Workbench](https://img.shields.io/badge/MySQL%20Workbench-8.0-blue.svg)](https://www.mysql.com/products/workbench/)
 [![Database Tool](https://img.shields.io/badge/DBeaver-Latest-orange.svg)](https://dbeaver.io/)
-[![Data Mining](https://img.shields.io/badge/Data%20Mining-Apriori-orange.svg)]()
 [![Time Series](https://img.shields.io/badge/Time%20Series-Moving%20Average-green.svg)]()
 [![License](https://img.shields.io/badge/license-MIT-informational.svg)]()
 
 <p align="center">
-  <img src="SQL WORKFLOW"alt="SQL Anomaly Analisis" width="500%">
+  <img src="SQL WORKFLOW.png"alt="SQL Anomaly Analisis" width="500%">
 </p>
 
 Lihat Dashboard:https://sql-anomaly-dashboard-portfolio-142260617876.asia-southeast1.run.app
